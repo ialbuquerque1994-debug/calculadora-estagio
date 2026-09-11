@@ -57,8 +57,9 @@ input[type="text"]{
 
 .dias{
     display:flex;
-    gap:15px;
+    gap:25px;
     flex-wrap:wrap;
+    margin-top:8px;
 }
 
 button{
@@ -125,6 +126,77 @@ table th, table td{
 .foraEscala{
     background:#f3f4f6;
 }
+
+.resultado-ok{
+    background:#dcfce7 !important;
+}
+
+.resultado-alerta{
+    background:#fef3c7 !important;
+}
+
+.resultado-erro{
+    background:#fee2e2 !important;
+}
+
+.carga-ok{
+    background:#dcfce7 !important;
+}
+
+.carga-erro{
+    background:#fee2e2 !important;
+}
+
+.card-acoes{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.opcoes-grid{
+    display:flex;
+    gap:25px;
+    flex-wrap:wrap;
+    align-items:center;
+}
+
+.opcoes-grid label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:0;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.card h3{
+    margin-top:0;
+}
+.tipo-estagio-linha{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.tipo-estagio-linha label{
+    margin:0;
+    white-space:nowrap;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.tipo-estagio-linha select{
+    width:250px;
+    padding:8px;
+}
+
+.tipo-estagio-linha{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
 </style>
 </head>
 <body>
@@ -132,37 +204,113 @@ table th, table td{
 <div class="container">
 
 <h1>
-Calculadora de Datas de Estágio
+📅 Calculadora de Datas de Estágio
 </h1>
 
 <div class="card">
 
+    <div class="tipo-estagio-linha">
+
+        <label for="tipoEstagio">
+            🎓 Tipo de Estágio
+        </label>
+
+        <select
+            id="tipoEstagio"
+            onchange="alterarTipoEstagio()">
+
+            <option value="obrigatorio">
+                Obrigatório
+            </option>
+
+            <option value="naoObrigatorio">
+                Não Obrigatório
+            </option>
+
+        </select>
+
+    </div>
+
+</div>
+<div id="secaoObrigatorio">
+
+<div class="card">
+
+<h3>🎓 Estágio Obrigatório</h3>
+
 <div class="form-grid">
+
 <div>
 <label>Data Início</label>
 <input type="date" id="dataInicio">
 </div>
 
 <div>
-<label>Carga Horária Total</label>
+<label>Data Final Informada pelo Aluno</label>
+<input type="date" id="dataFimValidacao">
+</div>
+
+<div>
+<label>Carga Horária Exigida</label>
 <input type="number" id="chTotal" value="100">
 </div>
 
-<div id="horarioSimples">
-
-<div>
-<label>Hora Início</label>
-<input type="time" id="horaInicio" value="08:00">
 </div>
 
-<div>
-<label>Hora Fim</label>
-<input type="time" id="horaFim" value="14:00">
+<div id="blocoDias" style="margin-top:15px;">
+
+<label>Dias de Estágio</label>
+
+<div class="dias">
+<label><input type="checkbox" value="1" checked> Seg</label>
+<label><input type="checkbox" value="2" checked> Ter</label>
+<label><input type="checkbox" value="3" checked> Qua</label>
+<label><input type="checkbox" value="4" checked> Qui</label>
+<label><input type="checkbox" value="5" checked> Sex</label>
+<label><input type="checkbox" value="6"> Sáb</label>
 </div>
+
+</div>
+
+<br>
+
+<div id="blocoHorarioPadrao">
+
+    <div
+        id="horarioSimples"
+        class="form-grid">
+
+    <div>
+
+        <label>
+            Hora Início
+        </label>
+
+        <input
+            type="time"
+            id="horaInicio"
+            value="08:00">
+
+    </div>
+
+    <div>
+
+        <label>
+            Hora Fim
+        </label>
+
+        <input
+            type="time"
+            id="horaFim"
+            value="14:00">
+
+    </div>
 
 </div>
 
 <div id="horarioIntervalo" style="display:none;">
+
+<div class="form-grid">
 
 <div>
 <label>Entrada Manhã</label>
@@ -186,45 +334,107 @@ Calculadora de Datas de Estágio
 
 </div>
 
-<label>Dias de Estágio</label>
-<div class="dias">
-<label><input type="checkbox" value="1" checked> Seg</label>
-<label><input type="checkbox" value="2" checked> Ter</label>
-<label><input type="checkbox" value="3" checked> Qua</label>
-<label><input type="checkbox" value="4" checked> Qui</label>
-<label><input type="checkbox" value="5" checked> Sex</label>
-<label><input type="checkbox" value="6"> Sáb</label>
-</div>
-
-<br>
-
-<div>
-    <label>Configuração</label>
-
-    <label style="font-weight:bold;">
-        <input type="checkbox" id="usaIntervalo">
-        Possui intervalo
-    </label>
 </div>
 
 </div>
-
-<label>
-<input type="checkbox" id="usaApi" checked>
-Considerar Feriados Nacionais (BrasilAPI)
-</label>
 
 </div>
 
 <div class="card">
 
-<h3>Feriados Municipais / Datas Sem Estágio</h3>
+    <h3>⚙️ Opções</h3>
+
+<div id="horariosPersonalizados" style="display:none;">
+
+<h3>Horários Personalizados</h3>
+
+<button onclick="adicionarHorario()">
++ Adicionar Horário
+</button>
+
+<table>
+    <thead>
+        <tr>
+            <th>Dia</th>
+            <th>Início</th>
+            <th>Fim</th>
+            <th>Ação</th>
+        </tr>
+    </thead>
+
+    <tbody id="listaHorarios">
+    </tbody>
+
+</table>
+
+</div>
+
+<div class="opcoes-grid">
+
+    <label>
+        <input
+            type="checkbox"
+            id="usaHorarioPersonalizado">
+
+        Utilizar horários personalizados
+    </label>
+
+    <label>
+        <input
+            type="checkbox"
+            id="usaIntervalo">
+
+        Possui intervalo
+    </label>
+
+    <label>
+        <input
+            type="checkbox"
+            id="usaApi"
+            checked>
+
+        Considerar Feriados Nacionais (BrasilAPI)
+    </label>
+
+</div>
+
+<div
+    id="alertaHorarioPersonalizado"
+    style="
+        display:none;
+        margin-top:10px;
+        padding:12px;
+        background:#e0f2fe;
+        border-left:4px solid #0284c7;
+        border-radius:5px;
+        color:#0c4a6e;
+    ">
+
+    ℹ️ Horários personalizados ativos.
+    Os campos de dias da semana e horário padrão não serão utilizados no cálculo.
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>🏖️ Feriados Municipais / Datas Sem Estágio</h3>
 
 <div class="form-grid">
 
 <div>
-<label>Data</label>
-<input type="date" id="dataBloqueada">
+<label>Data Inicial</label>
+<input
+    type="date"
+    id="dataBloqueadaInicio">
+</div>
+
+<div>
+<label>Data Final</label>
+<input
+    type="date"
+    id="dataBloqueadaFim">
 </div>
 
 <div>
@@ -243,7 +453,7 @@ Adicionar
 <table>
 <thead>
 <tr>
-<th>Data</th>
+<th>Período</th>
 <th>Motivo</th>
 <th>Ação</th>
 </tr>
@@ -255,20 +465,35 @@ Adicionar
 
 <div class="card">
 
-<h3> Validação de Plano de Estágio</h3>
+    <h3>🚀 Ações</h3>
 
-<div class="form-grid">
+    <div class="card-acoes">
 
-    <div>
-        <label>Data Final Informada pelo Aluno</label>
-        <input type="date" id="dataFimValidacao">
-    </div>
+    <button onclick="validarPlano()">
+        ✅ Validar Plano
+    </button>
 
-    <div style="display:flex;align-items:end;">
-       
-    </div>
+    <button onclick="calcular()">
+        📅 Calcular Estágio
+    </button>
+
+    <button
+        id="btnDetalhes"
+        onclick="toggleDetalhes()">
+        📋 Ver Detalhes
+    </button>
+
+    <button onclick="limparTudo()">
+        🧹 Limpar Tudo
+    </button>
 
 </div>
+
+</div>
+
+<div class="card">
+
+<h3>✅ Validação de Plano de Estágio</h3>
 
 <br>
 
@@ -280,44 +505,25 @@ Adicionar
     </div>
 
     <div class="box">
-        <h3>Carga Exigida</h3>
+        <h3>Carga Horária Exigida</h3>
         <div id="cargaExigida">-</div>
     </div>
 
-    <div class="box">
-        <h3>Resultado</h3>
-        <div id="resultadoValidacao">-</div>
-    </div>
+    <div class="box" id="boxResultado">
+
+    <h3>Resultado</h3>
+
+    <div id="resultadoValidacao">-</div>
 
 </div>
 
 </div>
-
-<div class="card">
-
-<button onclick="calcular()">
-Calcular Estágio
-</button>
-
- <button onclick="validarPlano()">
-            Validar Plano
-        </button>
-
-<button
-    id="btnDetalhes"
-    onclick="toggleDetalhes()">
-    📋 Ver Detalhes
-</button>
-
-<button onclick="limparTudo()">
-    🧹 Limpar Tudo
-</button>
 
 </div>
 
 <div class="card">
 
-<h3>Informações do Planejamento</h3>
+<h3>📊 Informações do Planejamento</h3>
 
 <div class="resultado">
 
@@ -329,6 +535,11 @@ Calcular Estágio
 <div class="box">
 <h3>Horas Cumpridas</h3>
 <div id="horasCumpridas">-</div>
+</div>
+
+<div class="box" id="boxCargaDiaria">
+<h3>Carga Diária</h3>
+<div id="cargaDiaria">-</div>
 </div>
 
 <div class="box">
@@ -378,6 +589,150 @@ Calcular Estágio
 
 </div>
 
+<div id="secaoNaoObrigatorio" style="display:none;">
+
+    <div class="card">
+
+        <h3>📋 Estágio Não Obrigatório</h3>
+
+        <div class="form-grid">
+
+            <div>
+                <label>Data Inicial</label>
+                <input
+                    type="date"
+                    id="dataInicioNaoObrigatorio">
+            </div>
+
+            <div>
+                <label>Data Final</label>
+                <input
+                    type="date"
+                    id="dataFimNaoObrigatorio">
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="form-grid">
+
+            <div>
+                <label>Hora Início</label>
+                <input
+                    type="time"
+                    id="horaInicioNaoObrigatorio"
+                    value="00:00">
+            </div>
+
+            <div>
+                <label>Hora Fim</label>
+                <input
+                    type="time"
+                    id="horaFimNaoObrigatorio"
+                    value="00:00">
+            </div>
+
+        </div>
+
+        <br>
+
+        <label>
+
+            <input
+                type="checkbox"
+                id="usaIntervaloNaoObrigatorio">
+
+            Possui intervalo
+
+        </label>
+
+        <div
+            id="intervaloNaoObrigatorio"
+            style="display:none; margin-top:15px;">
+
+            <div class="form-grid">
+
+                <div>
+                    <label>Entrada Manhã</label>
+                    <input
+                        type="time"
+                        id="entradaManhaNaoObrigatorio"
+                        value="00:00">
+                </div>
+
+                <div>
+                    <label>Saída Manhã</label>
+                    <input
+                        type="time"
+                        id="saidaManhaNaoObrigatorio"
+                        value="00:00">
+                </div>
+
+                <div>
+                    <label>Entrada Tarde</label>
+                    <input
+                        type="time"
+                        id="entradaTardeNaoObrigatorio"
+                        value="00:00">
+                </div>
+
+                <div>
+                    <label>Saída Tarde</label>
+                    <input
+                        type="time"
+                        id="saidaTardeNaoObrigatorio"
+                        value="00:00">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+    <h3>🚀 Ações</h3>
+
+    <div class="card-acoes">
+
+        <button onclick="validarNaoObrigatorio()">
+            ✅ Validar Período
+        </button>
+
+        <button onclick="limparNaoObrigatorio()">
+            🧹 Limpar
+        </button>
+    
+</div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="resultado">
+
+            <div class="box">
+                <h3>Tempo de Estágio</h3>
+                <div id="tempoNaoObrigatorio">-</div>
+            </div>
+
+            <div class="box">
+                <h3>Carga Diária</h3>
+                <div id="cargaDiariaNaoObrigatorio">-</div>
+            </div>
+
+            <div class="box">
+                <h3>Situação</h3>
+                <div id="situacaoNaoObrigatorio">-</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 <script>
 
 const bloqueios = [];
@@ -402,51 +757,291 @@ document
 
 });
 
+document
+.getElementById(
+    "usaIntervaloNaoObrigatorio"
+)
+.addEventListener(
+    "change",
+    function(){
+
+        document.getElementById(
+            "intervaloNaoObrigatorio"
+        ).style.display =
+            this.checked
+            ? "block"
+            : "none";
+
+    }
+);
+
+document
+.getElementById(
+    "usaHorarioPersonalizado"
+)
+.addEventListener(
+    "change",
+    function(){
+
+        const personalizado =
+            this.checked;
+
+document.getElementById(
+    "alertaHorarioPersonalizado"
+).style.display =
+    personalizado
+    ? "block"
+    : "none";
+
+        document.getElementById(
+            "horariosPersonalizados"
+        ).style.display =
+            personalizado
+            ? "block"
+            : "none";
+
+        document.getElementById(
+            "blocoDias"
+        ).style.display =
+            personalizado
+            ? "none"
+            : "block";
+
+        document.getElementById(
+            "blocoHorarioPadrao"
+        ).style.display =
+            personalizado
+            ? "none"
+            : "block";
+
+        document.getElementById(
+            "usaIntervalo"
+        ).parentElement.style.display =
+            personalizado
+            ? "none"
+            : "block";
+
+    }
+);
+
 function adicionarBloqueio(){
 
-    const data = document.getElementById("dataBloqueada").value;
-    const motivo = document.getElementById("motivoBloqueado").value;
+    const dataInicio =
+        document.getElementById(
+            "dataBloqueadaInicio"
+        ).value;
 
-    if(!data) return;
+    const dataFim =
+        document.getElementById(
+            "dataBloqueadaFim"
+        ).value;
+
+    const motivo =
+        document.getElementById(
+            "motivoBloqueado"
+        ).value;
+
+    if(!dataInicio){
+        return;
+    }
+
+if(dataFim && dataFim < dataInicio){
+
+    alert(
+        "A data final não pode ser menor que a data inicial."
+    );
+
+    return;
+
+}
 
     bloqueios.push({
-        data,
+
+        dataInicio,
+
+        dataFim:
+            dataFim || dataInicio,
+
         motivo
+
     });
 
     renderizarBloqueios();
 
-    document.getElementById("dataBloqueada").value="";
-    document.getElementById("motivoBloqueado").value="";
+    document.getElementById(
+        "dataBloqueadaInicio"
+    ).value = "";
+
+    document.getElementById(
+        "dataBloqueadaFim"
+    ).value = "";
+
+    document.getElementById(
+        "motivoBloqueado"
+    ).value = "";
 }
 
 function renderizarBloqueios(){
 
-    const tbody = document.getElementById("listaBloqueios");
+    const tbody =
+        document.getElementById(
+            "listaBloqueios"
+        );
 
-    tbody.innerHTML="";
+    tbody.innerHTML = "";
 
-    bloqueios.forEach((item,index)=>{
+    bloqueios.forEach(
+        (item,index)=>{
+
+const periodo =
+    item.dataInicio === item.dataFim
+
+    ? formatarDataISO(
+        item.dataInicio
+    )
+
+    : `${formatarDataISO(item.dataInicio)}
+       até
+       ${formatarDataISO(item.dataFim)}`;
 
         tbody.innerHTML += `
         <tr>
-            <td>${item.data}</td>
+
+            <td>${periodo}</td>
+
             <td>${item.motivo}</td>
+
             <td>
-                <button class="excluir"
-                onclick="removerBloqueio(${index})">
-                Remover
+
+                <button
+                    class="excluir"
+                    onclick="removerBloqueio(${index})">
+
+                    Remover
+
                 </button>
+
             </td>
+
         </tr>
         `;
+
     });
+
 }
 
 function removerBloqueio(index){
 
     bloqueios.splice(index,1);
     renderizarBloqueios();
+}
+
+function calcularHorasHorario(
+    inicio,
+    fim
+){
+
+    const [hi, mi] =
+        inicio.split(":")
+        .map(Number);
+
+    const [hf, mf] =
+        fim.split(":")
+        .map(Number);
+
+    return (
+        (hf * 60 + mf)
+        -
+        (hi * 60 + mi)
+    ) / 60;
+
+}
+
+function obterHorariosPersonalizados(){
+
+    const horarios = [];
+
+    document
+    .querySelectorAll(
+        "#listaHorarios tr"
+    )
+    .forEach(linha => {
+
+        const dia =
+            Number(
+                linha.querySelector(
+                    "select"
+                ).value
+            );
+
+        const inputs =
+            linha.querySelectorAll(
+                "input[type='time']"
+            );
+
+        horarios.push({
+
+            dia,
+
+            inicio:
+                inputs[0].value,
+
+            fim:
+                inputs[1].value
+
+        });
+
+    });
+
+    return horarios;
+
+}
+
+function adicionarHorario(){
+
+    const tabela =
+        document.getElementById(
+            "listaHorarios"
+        );
+
+    const linha =
+        document.createElement("tr");
+
+    linha.innerHTML = `
+        <td>
+            <select>
+                <option value="1">Seg</option>
+                <option value="2">Ter</option>
+                <option value="3">Qua</option>
+                <option value="4">Qui</option>
+                <option value="5">Sex</option>
+                <option value="6">Sáb</option>
+            </select>
+        </td>
+
+        <td>
+            <input
+                type="time"
+                value="08:00">
+        </td>
+
+        <td>
+            <input
+                type="time"
+                value="12:00">
+        </td>
+
+        <td>
+            <button
+                class="excluir"
+                onclick="this.closest('tr').remove()">
+                Remover
+            </button>
+        </td>
+    `;
+
+    tabela.appendChild(linha);
+
 }
 
 async function buscarFeriados(ano){
@@ -567,6 +1162,35 @@ if(!document.getElementById("usaIntervalo").checked){
         return;
     }
 
+document.getElementById(
+    "cargaDiaria"
+).innerText =
+    horasDia.toFixed(2) + " h";
+
+const cargaDiaria =
+    document.getElementById(
+        "boxCargaDiaria"
+    );
+
+cargaDiaria.classList.remove(
+    "carga-ok",
+    "carga-erro"
+);
+
+if(horasDia <= 6){
+
+    cargaDiaria.classList.add(
+        "carga-ok"
+    );
+
+}else{
+
+    cargaDiaria.classList.add(
+        "carga-erro"
+    );
+
+}
+
     const diasSelecionados =
         [...document.querySelectorAll(".dias input:checked")]
         .map(x=>Number(x.value));
@@ -625,10 +1249,14 @@ let ultimaDataComputada = null;
                 f => f.date === dataISO
             );
 
-        const bloqueado =
-            bloqueios.some(
-                b => b.data === dataISO
-            );
+const bloqueado =
+    bloqueios.some(b =>
+
+        dataISO >= b.dataInicio &&
+
+        dataISO <= b.dataFim
+
+    );
 
         let status = "";
 let observacao = "";
@@ -652,8 +1280,13 @@ else if(bloqueado){
 totalBloqueios++;
 
     status = "🟡 Bloqueado";
-    observacao = bloqueios.find(
-        b=>b.data===dataISO
+    observacao =
+    bloqueios.find(b =>
+
+        dataISO >= b.dataInicio &&
+
+        dataISO <= b.dataFim
+
     )?.motivo || "";
 
     classe = "bloqueado";
@@ -786,6 +1419,45 @@ const dataFim =
                 "chTotal"
             ).value
         );
+const usaPersonalizado =
+    document.getElementById(
+        "usaHorarioPersonalizado"
+    ).checked;
+
+let horasPorDia = {};
+
+if(usaPersonalizado){
+
+    const horarios =
+        obterHorariosPersonalizados();
+
+    horarios.forEach(h => {
+
+        const horas =
+            calcularHorasHorario(
+                h.inicio,
+                h.fim
+            );
+
+        if(!horasPorDia[h.dia]){
+
+            horasPorDia[h.dia] = 0;
+
+        }
+
+        horasPorDia[h.dia] += horas;
+
+    });
+
+    console.log(horasPorDia);
+
+}else{
+
+    console.log(
+        "Usando horário padrão"
+    );
+
+}
 
 let horasDia = 0;
 
@@ -840,6 +1512,68 @@ if(!document.getElementById("usaIntervalo").checked){
         horasDia / 60;
 }
 
+if(usaPersonalizado){
+
+    document.getElementById(
+        "cargaDiaria"
+    ).innerText =
+        "✅ Ativos (Ver Detalhes)";
+
+}else{
+
+    document.getElementById(
+        "cargaDiaria"
+    ).innerText =
+        horasDia.toFixed(2) + " h";
+
+}
+
+const tituloCarga =
+    document.querySelector(
+        "#boxCargaDiaria h3"
+    );
+
+if(usaPersonalizado){
+
+    tituloCarga.innerText =
+        "Horários Personalizados";
+
+}else{
+
+    tituloCarga.innerText =
+        "Carga Diária";
+
+}
+
+const cargaDiaria =
+    document.getElementById(
+        "boxCargaDiaria"
+    );
+
+cargaDiaria.classList.remove(
+    "carga-ok",
+    "carga-erro"
+);
+
+if(usaPersonalizado){
+
+    cargaDiaria.classList.add(
+        "carga-ok"
+    );
+
+}else if(horasDia <= 6){
+
+    cargaDiaria.classList.add(
+        "carga-ok"
+    );
+
+}else{
+
+    cargaDiaria.classList.add(
+        "carga-erro"
+    );
+
+}
     const diasSelecionados =
         [...document.querySelectorAll(
             ".dias input:checked"
@@ -899,8 +1633,12 @@ tabela.innerHTML = "";
     ).padStart(2,"0");
 
 const bloqueado =
-    bloqueios.some(
-        b => b.data === dataISO
+    bloqueios.some(b =>
+
+        dataISO >= b.dataInicio &&
+
+        dataISO <= b.dataFim
+
     );
 
 const ehFeriado =
@@ -934,26 +1672,47 @@ totalBloqueios++;
     status = "🟡 Bloqueado";
 
     observacao =
-        bloqueios.find(
-            b => b.data === dataISO
-        )?.motivo || "";
+    bloqueios.find(b =>
+
+        dataISO >= b.dataInicio &&
+
+        dataISO <= b.dataFim
+
+    )?.motivo || "";
 
     classe = "bloqueado";
 
 }
+
 else if(
-    diasSelecionados.includes(
-        diaSemana
+    (
+        usaPersonalizado &&
+        horasPorDia[diaSemana]
     )
-){
+    ||
+    (
+        !usaPersonalizado &&
+        diasSelecionados.includes(
+            diaSemana
+        )
+    )
+)
+
+{
 
     status = "✅ Computado";
     observacao = "-";
     classe = "computado";
 
-    horasLancadas = horasDia;
+horasLancadas =
+    usaPersonalizado
+    ? horasPorDia[diaSemana]
+    : horasDia;
+
 diasComputados++;
-    horasPrevistas += horasDia;
+
+horasPrevistas +=
+    horasLancadas;
 }
 else{
 
@@ -988,24 +1747,38 @@ tabela.innerHTML += `
     ).innerText =
         cargaExigida.toFixed(2) + "h";
 
-const diferencaDias =
-    Math.floor(
-        (dataFim - dataInicio) /
-        (1000 * 60 * 60 * 24)
-    ) + 1;
+let anos =
+    dataFim.getFullYear() -
+    dataInicio.getFullYear();
 
-const anos =
-    Math.floor(
-        diferencaDias / 365
-    );
+let meses =
+    dataFim.getMonth() -
+    dataInicio.getMonth();
 
-const meses =
-    Math.floor(
-        (diferencaDias % 365) / 30
-    );
+let dias =
+    dataFim.getDate() -
+    dataInicio.getDate();
 
-const dias =
-    (diferencaDias % 365) % 30;
+if(dias < 0){
+
+    meses--;
+
+    const ultimoDiaMesAnterior =
+        new Date(
+            dataFim.getFullYear(),
+            dataFim.getMonth(),
+            0
+        ).getDate();
+
+    dias += ultimoDiaMesAnterior;
+}
+
+if(meses < 0){
+
+    anos--;
+    meses += 12;
+
+}
 
 document.getElementById(
     "tempoEstagio"
@@ -1015,7 +1788,22 @@ document.getElementById(
     const diferenca =
         horasPrevistas - cargaExigida;
 
+const boxResultado =
+    document.getElementById(
+        "boxResultado"
+    );
+
+boxResultado.classList.remove(
+    "resultado-ok",
+    "resultado-alerta",
+    "resultado-erro"
+);
+
     if(diferenca === 0){
+
+boxResultado.classList.add(
+    "resultado-ok"
+);
 
         document.getElementById(
             "resultadoValidacao"
@@ -1023,6 +1811,10 @@ document.getElementById(
             "✅ Plano Correto";
 
     }else if(diferenca > 0){
+
+boxResultado.classList.add(
+    "resultado-erro"
+);
 
         document.getElementById(
             "resultadoValidacao"
@@ -1032,6 +1824,10 @@ document.getElementById(
             "h";
 
     }else{
+
+boxResultado.classList.add(
+    "resultado-alerta"
+);
 
         document.getElementById(
             "resultadoValidacao"
@@ -1070,11 +1866,298 @@ document.getElementById(
 
 }
 
+function alterarTipoEstagio(){
+
+    const tipo =
+        document.getElementById(
+            "tipoEstagio"
+        ).value;
+
+    if(tipo === "obrigatorio"){
+
+        document.getElementById(
+            "secaoObrigatorio"
+        ).style.display = "block";
+
+        document.getElementById(
+            "secaoNaoObrigatorio"
+        ).style.display = "none";
+
+    }else{
+
+        document.getElementById(
+            "secaoObrigatorio"
+        ).style.display = "none";
+
+        document.getElementById(
+            "secaoNaoObrigatorio"
+        ).style.display = "block";
+
+    }
+
+}
+
+function validarNaoObrigatorio(){
+
+    const dataInicio =
+        criarDataLocal(
+            document.getElementById(
+                "dataInicioNaoObrigatorio"
+            ).value
+        );
+
+    const dataFim =
+        criarDataLocal(
+            document.getElementById(
+                "dataFimNaoObrigatorio"
+            ).value
+        );
+
+    if(isNaN(dataInicio) || isNaN(dataFim)){
+
+        alert(
+            "Informe a data inicial e a data final."
+        );
+
+        return;
+
+    }
+
+    const diferencaDias =
+        Math.floor(
+            (dataFim - dataInicio) /
+            (1000 * 60 * 60 * 24)
+        ) + 1;
+
+let anos =
+    dataFim.getFullYear() -
+    dataInicio.getFullYear();
+
+let meses =
+    dataFim.getMonth() -
+    dataInicio.getMonth();
+
+let dias =
+    dataFim.getDate() -
+    dataInicio.getDate();
+
+if(dias < 0){
+
+    meses--;
+
+    const ultimoDiaMesAnterior =
+        new Date(
+            dataFim.getFullYear(),
+            dataFim.getMonth(),
+            0
+        ).getDate();
+
+    dias += ultimoDiaMesAnterior;
+}
+
+if(meses < 0){
+
+    anos--;
+    meses += 12;
+
+}
+
+document.getElementById(
+    "tempoNaoObrigatorio"
+).innerText =
+    `${anos} ano(s), ${meses} mês(es) e ${dias} dia(s)`;
+
+const dataLimite =
+    new Date(dataInicio);
+
+dataLimite.setFullYear(
+    dataLimite.getFullYear() + 2
+);
+
+let horasDia = 0;
+
+if(
+    !document.getElementById(
+        "usaIntervaloNaoObrigatorio"
+    ).checked
+){
+
+    const horaInicio =
+        document.getElementById(
+            "horaInicioNaoObrigatorio"
+        ).value;
+
+    const horaFim =
+        document.getElementById(
+            "horaFimNaoObrigatorio"
+        ).value;
+
+    const [hi, mi] =
+        horaInicio.split(":").map(Number);
+
+    const [hf, mf] =
+        horaFim.split(":").map(Number);
+
+    horasDia =
+        ((hf * 60 + mf) -
+        (hi * 60 + mi)) / 60;
+
+}else{
+
+    const calc = hora => {
+
+        const [h,m] =
+            hora.split(":").map(Number);
+
+        return h * 60 + m;
+    };
+
+    horasDia =
+
+        (
+            calc(
+                document.getElementById(
+                    "saidaManhaNaoObrigatorio"
+                ).value
+            )
+            -
+
+            calc(
+                document.getElementById(
+                    "entradaManhaNaoObrigatorio"
+                ).value
+            )
+        )
+
+        +
+
+        (
+            calc(
+                document.getElementById(
+                    "saidaTardeNaoObrigatorio"
+                ).value
+            )
+            -
+
+            calc(
+                document.getElementById(
+                    "entradaTardeNaoObrigatorio"
+                ).value
+            )
+        );
+
+    horasDia =
+        horasDia / 60;
+}
+
+document.getElementById(
+    "cargaDiariaNaoObrigatorio"
+).innerText =
+    horasDia.toFixed(2) + " h";
+
+if(horasDia > 6){
+
+    document.getElementById(
+        "situacaoNaoObrigatorio"
+    ).innerText =
+        "❌ Ultrapassa 6 horas diárias";
+
+}
+else if(dataFim > dataLimite){
+
+    document.getElementById(
+        "situacaoNaoObrigatorio"
+    ).innerText =
+        "❌ Ultrapassa o limite de 2 anos";
+
+}
+else{
+
+    document.getElementById(
+        "situacaoNaoObrigatorio"
+    ).innerText =
+        "✅ Dentro do limite legal";
+
+}
+
+}
+
+function limparNaoObrigatorio(){
+
+    document.getElementById(
+        "dataInicioNaoObrigatorio"
+    ).value = "";
+
+    document.getElementById(
+        "dataFimNaoObrigatorio"
+    ).value = "";
+
+    document.getElementById(
+        "horaInicioNaoObrigatorio"
+    ).value = "00:00";
+
+    document.getElementById(
+        "horaFimNaoObrigatorio"
+    ).value = "00:00";
+
+    document.getElementById(
+        "usaIntervaloNaoObrigatorio"
+    ).checked = false;
+
+    document.getElementById(
+        "intervaloNaoObrigatorio"
+    ).style.display = "none";
+
+    document.getElementById(
+        "entradaManhaNaoObrigatorio"
+    ).value = "00:00";
+
+    document.getElementById(
+        "saidaManhaNaoObrigatorio"
+    ).value = "00:00";
+
+    document.getElementById(
+        "entradaTardeNaoObrigatorio"
+    ).value = "00:00";
+
+    document.getElementById(
+        "saidaTardeNaoObrigatorio"
+    ).value = "00:00";
+
+    document.getElementById(
+        "tempoNaoObrigatorio"
+    ).innerText = "-";
+
+    document.getElementById(
+        "cargaDiariaNaoObrigatorio"
+    ).innerText = "-";
+
+    document.getElementById(
+        "situacaoNaoObrigatorio"
+    ).innerText = "-";
+
+}
+
+function formatarDataISO(dataISO){
+
+    const [ano, mes, dia] =
+        dataISO.split("-");
+
+    return `${dia}/${mes}/${ano}`;
+
+}
+
 function limparTudo(){
 
     document.getElementById("dataInicio").value = "";
     document.getElementById("dataFimValidacao").value = "";
-document.getElementById("dataBloqueada").value = "";
+document.getElementById(
+    "dataBloqueadaInicio"
+).value = "";
+
+document.getElementById(
+    "dataBloqueadaFim"
+).value = "";
 document.getElementById("motivoBloqueado").value = "";
     document.getElementById("chTotal").value = "100";
     document.getElementById("horaInicio").value = "08:00";
@@ -1093,6 +2176,13 @@ document.getElementById("usaApi").checked = true;
 document.getElementById("tempoEstagio").innerText = "-";
     document.getElementById("dataFinal").innerText = "-";
     document.getElementById("horasCumpridas").innerText = "-";
+document.getElementById("cargaDiaria").innerText = "-";
+document.getElementById(
+    "boxCargaDiaria"
+).classList.remove(
+    "carga-ok",
+    "carga-erro"
+);
     document.getElementById("diasComputados").innerText = "-";
     document.getElementById("feriadosIgnorados").innerText = "0";
     document.getElementById("bloqueiosIgnorados").innerText = "0";
@@ -1110,6 +2200,42 @@ document
 });
     bloqueios.length = 0;
     renderizarBloqueios();
+document.getElementById(
+    "usaHorarioPersonalizado"
+).checked = false;
+
+document.getElementById(
+    "horariosPersonalizados"
+).style.display = "none";
+
+document.getElementById(
+    "alertaHorarioPersonalizado"
+).style.display = "none";
+
+document.getElementById(
+    "listaHorarios"
+).innerHTML = "";
+document.getElementById(
+    "blocoDias"
+).style.display = "block";
+
+document.getElementById(
+    "blocoHorarioPadrao"
+).style.display = "block";
+
+document.getElementById(
+    "usaIntervalo"
+).parentElement.style.display =
+    "block";
+document.querySelector(
+    "#boxCargaDiaria h3"
+).innerText =
+    "Carga Diária";
+
+document.getElementById(
+    "cargaDiaria"
+).innerText =
+    "-";
 }
 
 </script>
@@ -1121,7 +2247,7 @@ document
     margin-top:30px;
     padding:10px;
 ">
-    Calculadora de Datas de Estágio • Versão 1.0 - Ferramenta de apoio ao planejamento e validação de estágios - Desenvolvido por Igor Albuquerque
+    Calculadora de Datas de Estágio • Versão 2.5 - Ferramenta de apoio ao planejamento e validação de estágios - Desenvolvido por Igor Albuquerque
 </footer>
 
 </body>
